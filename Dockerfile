@@ -20,7 +20,7 @@ COPY ./package.json ./package.json
 RUN npm install
 
 # Copy backend code
-COPY ./server /app/server
+COPY ./api /app/api
 
 # Copy data file
 COPY data.json ./data.json
@@ -29,7 +29,7 @@ COPY data.json ./data.json
 COPY --from=frontend /app/client/dist ./public-dist
 
 # Set working directory to the backend
-WORKDIR /app/server
+WORKDIR /app/api
 
 # Expose the port and run the backend
 ENV NODE_ENV=production
