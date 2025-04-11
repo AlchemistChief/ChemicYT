@@ -13,7 +13,7 @@ FROM node:18
 
 WORKDIR /app
 
-COPY server ./server
+# COPY server ./server
 COPY data.json ./data.json
 COPY --from=frontend /app/public/dist ./public-dist
 
