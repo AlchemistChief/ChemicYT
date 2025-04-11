@@ -1,10 +1,10 @@
-# Stage 1: Build frontend
+# Stage 1: Build frontend (if needed)
 FROM node:18 AS frontend
 
 WORKDIR /app
 
-COPY public ./public
-WORKDIR /app/public
+COPY client ./client
+WORKDIR /app/client
 
 RUN npm install && npm run build
 
@@ -13,14 +13,25 @@ FROM node:18
 
 WORKDIR /app
 
-COPY api ./api
-COPY data.json ./data.json
-COPY --from=frontend /app/public/dist ./public-dist
+# Copy the package.json from the root directory to install backend dependencies
+COPY ./package.json ./package.json
 
-WORKDIR /app/api
-
+# Install backend dependencies
 RUN npm install
 
+# Copy backend code
+COPY ./server /app/server
+
+# Copy data file
+COPY data.json ./data.json
+
+# Copy built frontend files from the frontend build stage
+COPY --from=frontend /app/client/dist ./public-dist
+
+# Set working directory to the backend
+WORKDIR /app/server
+
+# Expose the port and run the backend
 ENV NODE_ENV=production
 ENV PORT=3000
 

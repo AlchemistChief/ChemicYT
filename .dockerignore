@@ -1,5 +1,5 @@
 node_modules
 public/node_modules
-server/node_modules
+api/node_modules
 dist
 .git
