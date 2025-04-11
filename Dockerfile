@@ -3,8 +3,8 @@ FROM node:18 AS frontend
 
 WORKDIR /app
 
-COPY client ./client
-WORKDIR /app/client
+COPY public ./public
+WORKDIR /app/public
 
 RUN npm install && npm run build
 
@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY server ./server
 COPY data.json ./data.json
-COPY --from=frontend /app/client/dist ./client-dist
+COPY --from=frontend /app/public/dist ./public-dist
 
 WORKDIR /app/server
 
