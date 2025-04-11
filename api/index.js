@@ -29,6 +29,25 @@ app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../favicon.ico'));
 });
 
+
+app.post('/api/download', (req, res) => {
+    const scriptPath = path.join(__dirname, 'python.py'); // Path to the Python script
+
+    execFile('python', [scriptPath], (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing Python script: ${error.message}`);
+            return res.status(500).json({ error: 'Failed to execute Python script' });
+        }
+
+        if (stderr) {
+            console.error(`Python script stderr: ${stderr}`);
+        }
+
+        console.log(`Python script output: ${stdout}`);
+        res.json({ message: 'Python script executed successfully', output: stdout });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

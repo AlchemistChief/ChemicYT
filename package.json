@@ -4,7 +4,8 @@
   "description": "Description for youtube downloader",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.20.0"
+    "express": "^4.20.0",
+    "cors" : "latest"
   },
   "author": "",
   "license": "ISC"
