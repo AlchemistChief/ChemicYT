@@ -32,7 +32,7 @@ app.get('favicon.ico', (req, res) => {
 
 
 app.post('/api/download', (req, res) => {
-    const scriptPath = path.join(__dirname, '/python.py'); // Path to the Python script
+    const scriptPath = path.join(__dirname, '/download.py'); // Path to the Python script
 
     execFile('python', [scriptPath], (error, stdout, stderr) => {
         if (error) {
