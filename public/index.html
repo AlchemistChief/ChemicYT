@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChemicYT - YouTube Downloader</title>
+    <link rel="icon" rel="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,10 +15,13 @@
     <main class="content">
         <div class="main-flex-container">
             <div class="fetch-container">
-                <input type="text" placeholder="Enter YouTube link" class="link-input">
+                <div class="input-group">
+                    <input type="text" placeholder="Enter YouTube link" class="link-input">
+                    <button class="fetch-button">Fetch</button>
+                </div>
                 <iframe class="video-embed" style="display: none;"></iframe>
             </div>
-            <div class="download-container" style="display: block;">
+            <div class="download-container" style="display: none;">
                 <table>
                     <thead>
                         <tr>
@@ -26,11 +31,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Sample Video Title</td>
+                            <!--<td>Sample Video Title</td>
                             <td>
                                 <button>MP3 / M4A</button>
                                 <button>Playlist</button>
-                            </td>
+                            </td>-->
                         </tr>
                     </tbody>
                 </table>
@@ -40,20 +45,20 @@
                     Log Terminal
                     <button class="close-log">X</button>
                 </div>
-                <div class="log-content" style="display: none;">
-                    <p>Log messages will appear here...</p>
+                <div class="log-content" style="display: block;">
                 </div>
             </div>
         </div>
     </main>
     <footer class="footer">
         <div class="footer-left">
-            <p>ChemicYT &copy; 2023</p>
+            <p>ChemicYT &copy; 2025</p>
         </div>
         <div class="footer-right">
             <a href="#license">License</a>
             <a href="https://github.com" target="_blank">GitHub</a>
         </div>
     </footer>
+    <script src="client.js"></script>
 </body>
 </html>

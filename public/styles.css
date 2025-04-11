@@ -70,19 +70,40 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
+.fetch-container .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .link-input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #6a0dad;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #121212;
     color: #ffffff;
-    margin-bottom: 10px;
     box-sizing: border-box; /* Ensure padding and border are included in the element's width */
 }
 
 .link-input::placeholder {
     color: #6a0dad;
+}
+
+.fetch-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fetch-button:hover {
+    background-color: #0056b3;
 }
 
 .video-embed {
@@ -99,7 +120,8 @@ body {
 
 .download-container td {
     padding: 10px;
-    text-align: left;
+    text-align: center; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
 }
 
 .download-container button {
@@ -110,6 +132,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin: 0 auto; /* Center the button within the column */
 }
 
 .download-container button:hover {
@@ -129,6 +152,7 @@ body {
     min-height: 50px;
     max-height: 300px;
     overflow: hidden; /* Prevent content overflow */
+    transition: max-height 0.3s ease; /* Smooth resizing */
 }
 
 .log-header {
