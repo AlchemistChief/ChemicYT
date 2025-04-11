@@ -3,8 +3,8 @@ FROM node:18 AS frontend
 
 WORKDIR /app
 
-COPY client ./client
-WORKDIR /app/client
+COPY public ./public
+WORKDIR /app/public
 
 RUN npm install && npm run build
 
@@ -26,7 +26,7 @@ COPY ./api /app/api
 COPY data.json ./data.json
 
 # Copy built frontend files from the frontend build stage
-COPY --from=frontend /app/client/dist ./public-dist
+COPY --from=frontend /app/public/dist ./public-dist
 
 # Set working directory to the backend
 WORKDIR /app/api
