@@ -19,7 +19,7 @@ RUN npm install
 # Copy backend code
 COPY ./api /app/api
 COPY data.json ./data.json
-COPY --from=frontend /app/public/dist /app/public-dist
+COPY --from=frontend /app/public /app/public
 
 # Set working directory to the backend
 WORKDIR /app/api

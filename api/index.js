@@ -7,22 +7,22 @@ const PORT = process.env.PORT || 3000
 
 const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'utf-8'))
 
-app.use(express.static(path.join(__dirname, '../public-dist')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('/api/data', (req, res) => {
     res.json(data)
 })
 
 app.get('/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public-dist/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.get('/styles.css', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public-dist/styles.css'));
+    res.sendFile(path.join(__dirname, '../public/styles.css'));
 });
 
 app.get('/client.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public-dist/client.js'));
+    res.sendFile(path.join(__dirname, '../public/client.js'));
 });
 
 app.get('/favicon.ico', (req, res) => {
