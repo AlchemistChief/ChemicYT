@@ -4,9 +4,6 @@ FROM node:18 AS frontend
 WORKDIR /app
 
 COPY public ./public
-WORKDIR /app/public
-
-RUN npm install && npm run build
 
 # Stage 2: Setup backend and serve frontend
 FROM node:18
@@ -21,12 +18,8 @@ RUN npm install
 
 # Copy backend code
 COPY ./api /app/api
-
-# Copy data file
 COPY data.json ./data.json
-
-# Copy built frontend files from the frontend build stage
-COPY --from=frontend /app/public/dist ./public-dist
+COPY --from=frontend /app/public ./public
 
 # Set working directory to the backend
 WORKDIR /app/api
