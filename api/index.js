@@ -9,7 +9,7 @@ const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'u
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.get('/api/data', (req, res) => {
+app.get('/data.json', (req, res) => {
     res.json(data)
 })
 
