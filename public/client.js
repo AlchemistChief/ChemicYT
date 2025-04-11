@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function requestDownloadApi(type, normalizedUrl) {
         try {
             const serverApiUrl = await fetchServerApiUrl();
-            const response = await fetch(`${serverApiUrl}/server/download`, {
+            const response = await fetch(`${serverApiUrl}/api/download`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
