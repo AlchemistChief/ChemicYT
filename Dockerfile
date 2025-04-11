@@ -13,11 +13,11 @@ FROM node:18
 
 WORKDIR /app
 
-# COPY server ./server
+COPY api ./api
 COPY data.json ./data.json
 COPY --from=frontend /app/public/dist ./public-dist
 
-WORKDIR /app/server
+WORKDIR /app/api
 
 RUN npm install
 
