@@ -13,6 +13,9 @@ WORKDIR /app
 # Install Python
 RUN apt-get update && apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python
 
+# Verify Python installation
+RUN python --version
+
 # Copy the package.json from the root directory to install backend dependencies
 COPY ./package.json ./package.json
 

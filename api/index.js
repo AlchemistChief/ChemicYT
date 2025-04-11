@@ -1,6 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const { execFile } = require('child_process');
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -26,7 +27,7 @@ app.get('/client.js', (req, res) => {
 });
 
 app.get('/favicon.ico', (req, res) => {
-    res.sendFile(path.join(__dirname, '../favicon.ico'));
+    res.sendFile(path.join(__dirname, '../public/favicon.ico'));
 });
 
 
