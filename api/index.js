@@ -26,13 +26,13 @@ app.get('/client.js', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/client.js'));
 });
 
-app.get('/favicon.ico', (req, res) => {
+app.get('favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/favicon.ico'));
 });
 
 
 app.post('/api/download', (req, res) => {
-    const scriptPath = path.join(__dirname, 'python.py'); // Path to the Python script
+    const scriptPath = path.join(__dirname, '/python.py'); // Path to the Python script
 
     execFile('python', [scriptPath], (error, stdout, stderr) => {
         if (error) {
