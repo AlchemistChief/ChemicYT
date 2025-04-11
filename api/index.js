@@ -13,9 +13,21 @@ app.get('/api/data', (req, res) => {
     res.json(data)
 })
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public-dist/index.html'))
-})
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public-dist/index.html'));
+});
+
+app.get('/styles.css', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public-dist/styles.css'));
+});
+
+app.get('/client.js', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public-dist/client.js'));
+});
+
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, '../favicon.ico'));
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
