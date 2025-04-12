@@ -10,17 +10,20 @@ FROM node:18
 
 WORKDIR /app
 
-# Install Python
+# Install Python and pip
 RUN apt-get update && apt-get install -y python3 python3-pip && ln -s /usr/bin/python3 /usr/bin/python
 
 # Verify Python installation
 RUN python --version
 
+# Copy package.json and requirements.txt
 COPY ./package.json ./package.json
 COPY ./requirements.txt ./requirements.txt
 
-# Install backend dependencies
+# Install backend dependencies (Node.js)
 RUN npm install
+# Install Python dependencies
+RUN pip install -r requirements.txt
 
 # Copy backend code
 COPY ./api /app/api
