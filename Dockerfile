@@ -19,7 +19,7 @@ RUN python --version
 # Download and extract the latest ffmpeg release
 RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
     tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz && \
-    mv ffmpeg-*-gpl/ffmpeg /bin/ && \    git rebase --continue
+    mv ffmpeg-*-gpl/ffmpeg /bin/ && \
     mv ffmpeg-*-gpl/ffprobe /bin/ && \
     rm -rf ffmpeg-master-latest-linux64-gpl.tar.xz ffmpeg-*-gpl
 
