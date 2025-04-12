@@ -3,33 +3,19 @@ const fs = require('fs')
 const path = require('path')
 const { execFile } = require('child_process');
 
+
 const app = express()
 const PORT = process.env.PORT || 3000
-
 const data = JSON.parse(fs.readFileSync(path.join(__dirname, '/data.json'), 'utf-8'))
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.get('/data.json', (req, res) => {
-    res.json(data)
-})
-
-app.get('/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-});
-
-app.get('/styles.css', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/styles.css'));
-});
-
-app.get('/client.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/client.js'));
-});
-
-app.get('favicon.ico', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/favicon.ico'));
-});
+app.get('/data.json', (req, res) => {res.json(data)})
+app.get('/index.html', (req, res) => {res.sendFile(path.join(__dirname, '../public/index.html'));});
+app.get('/styles.css', (req, res) => {res.sendFile(path.join(__dirname, '../public/styles.css'));});
+app.get('/client.js', (req, res) => {res.sendFile(path.join(__dirname, '../public/client.js'));});
+app.get('favicon.ico', (req, res) => {res.sendFile(path.join(__dirname, '../public/favicon.ico'));});
 
 
 app.post('/api/download', (req, res) => {
@@ -54,7 +40,6 @@ app.post('/api/download', (req, res) => {
         }
 
         try {
-            // Parse the JSON output from Python script
             const result = JSON.parse(stdout.trim());
 
             if (result.error) {
@@ -64,7 +49,7 @@ app.post('/api/download', (req, res) => {
 
             const filePath = result.file_path;
             if (fs.existsSync(filePath)) {
-                const filename = path.basename(filePath); // Extract the actual filename
+                const filename = path.basename(filePath);
                 res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
                 res.download(filePath, filename, (err) => {
                     if (err) {

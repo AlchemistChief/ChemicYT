@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             case "ERROR":
                 keywordSpan.style.color = "#FF0000";
                 break;
-            case "SUCCESS":
+            case "VALID":
                 keywordSpan.style.color = "#00FF00";
                 break;
             case "DEBUG":
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 throw new Error("Invalid YouTube URL format.");
             }
-
+            logMessage(`Normalized URL: ${normalizedUrl}`, "VALID");
             return { normalizedUrl, type, id };
         } catch (error) {
             logMessage(error.message, "ERROR");
@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function requestDownloadApi(type, normalizedUrl) {
         try {
+            logMessage(`Requesting download`, "VALID");
             const serverApiUrl = await fetchServerApiUrl();
             const response = await fetch(`${serverApiUrl}/api/download`, {
                 method: "POST",
@@ -101,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                // Extract the filename from the Content-Disposition header
+                logMessage(`File successfully downloaded`, "VALID");
                 const contentDisposition = response.headers.get("Content-Disposition");
                 let filename = "download.m4a"; // Default filename
 
@@ -173,7 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result) {
                 const { normalizedUrl, type, id } = result;
                 linkInputElement.value = normalizedUrl;
-                logMessage(`Normalized URL: ${normalizedUrl}`, "SUCCESS");
 
                 const apiKey = await fetchYTApiKey();
                 if (type === "file") {

@@ -3,7 +3,6 @@ WORKDIR /app
 COPY public ./public
 FROM node:18
 
-
 WORKDIR /app
 
 # Copy package.json and requirements.txt

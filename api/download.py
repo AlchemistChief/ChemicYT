@@ -5,18 +5,17 @@ import json
 import logging
 from yt_dlp import YoutubeDL
 
-# Setup logging
-logging.basicConfig(
-    level=logging.DEBUG,  # You can set this to DEBUG for more detailed logs
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout),  # Log to console
-        logging.FileHandler('download_errors.log')  # Log to a file
-    ]
-)
-
 Cookie_File = os.path.join(os.path.dirname(__file__), "cookies.txt")
 Binary_Location = os.path.join(os.path.dirname(__file__), "bin")
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('download_errors.log')
+    ]
+)
 
 def get_basic_options(output_dir):
     return {
@@ -24,10 +23,14 @@ def get_basic_options(output_dir):
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
         'ffmpeg_location': Binary_Location,
         'cookiefile': Cookie_File,
+        'nocheckcertificate': True,
+        'no_abort_on_error': True,
         'writethumbnail': True,
-        'embedthumbnail': True,
-        'embedmetadata': True,
-        'addmetadata': True,
+        'extract_audio': True,
+        'no_embed_subs': True,
+        'ignore_errors': True,
+        'force_ipv4': True,
+        'no_update': True,
         'quiet': True,
         'postprocessors': [
             {
@@ -47,8 +50,8 @@ def download_file(url, output_dir):
     ydl_opts = {
         **get_basic_options(output_dir),
         "noplaylist": True,
+        "yesplaylist": False,
     }
-
     try:
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
@@ -62,8 +65,8 @@ def download_playlist(url, output_dir):
     ydl_opts = {
         **get_basic_options(output_dir),
         "noplaylist": False,
+        "yesplaylist": True,
     }
-
     try:
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
