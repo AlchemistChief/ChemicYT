@@ -28,48 +28,57 @@ app.post('/api/download', (req, res) => {
     const scriptPath = path.join(__dirname, '/download.py');
 
     // Execute the Python script
-    execFile('python', [scriptPath, url, type], (error, stdout, stderr) => {
-    if (error) {
-        console.error(`Error executing Python script: ${error.message}`);
-        return res.status(500).json({ error: 'Failed to execute Python script', details: error.message });
-    }
+    console.log(`Request received, executing downlaod.py`)
+    const { execFile } = require('child_process');
+    const fs = require('fs');
+    const path = require('path');
 
-    if (stderr) {
-        console.error(`Python script stderr: ${stderr}`);
-        return res.status(500).json({ error: 'Python script stderr', details: stderr });
-    }
+    // generate a unique temp file path for the "custom channel"
+    const channelPath = path.join('/tmp', `channel_${Date.now()}.json`);
 
-    console.log("Python script stdout:", stdout); // Add this log to see the raw output
-
-    try {
-        const result = JSON.parse(stdout.trim());
-
-        if (result.error) {
-            console.error(`Python script error: ${result.error}`);
-            return res.status(500).json({ error: result.error, details: 'Python script error' });
+    execFile('python3', [scriptPath, url, type, channelPath], (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error executing Python script: ${error.message}`);
+            return res.status(500).json({ error: 'Failed to execute Python script', details: error.message });
         }
 
-        const filePath = result.file_path;
-        if (fs.existsSync(filePath)) {
-            const filename = path.basename(filePath);
-            res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-            res.download(filePath, filename, (err) => {
-                if (err) {
-                    console.error(`Error sending file: ${err.message}`);
-                } else {
-                    console.log(`File sent successfully: ${filePath}`);
-                }
-            });
-        } else {
-            console.error("File not found after download");
-            return res.status(500).json({ error: "File not found after download", details: "The file path does not exist after download" });
+        if (stderr) {
+            console.error(`Python script stderr: ${stderr}`);
+            // optionally don't return here if stderr is just logs
         }
-    } catch (err) {
-        console.error('Error parsing Python script output:', err);
-        return res.status(500).json({ error: 'Error processing Python script output', details: err.message });
-    }
-});
 
+        console.log("Python script stdout:", stdout); // can include download logs
+
+        try {
+            // read the custom channel output (safe from extra logs)
+            const raw = fs.readFileSync(channelPath, 'utf-8');
+            const result = JSON.parse(raw);
+
+            if (result.error) {
+                console.error(`Python script error: ${result.error}`);
+                return res.status(500).json({ error: result.error, details: 'Python script error' });
+            }
+
+            const filePath = result.file_path;
+            if (fs.existsSync(filePath)) {
+                const filename = path.basename(filePath);
+                res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+                res.download(filePath, filename, (err) => {
+                    if (err) {
+                        console.error(`Error sending file: ${err.message}`);
+                    } else {
+                        console.log(`File sent successfully: ${filePath}`);
+                    }
+                });
+            } else {
+                console.error("File not found after download");
+                return res.status(500).json({ error: "File not found after download", details: "The file path does not exist after download" });
+            }
+        } catch (err) {
+            console.error('Error parsing custom output channel:', err);
+            return res.status(500).json({ error: 'Error processing output', details: err.message });
+        }
+    });
 });
 
 app.listen(PORT, () => {

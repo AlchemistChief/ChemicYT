@@ -87,31 +87,31 @@ def download_playlist(url, output_dir):
         raise
 
 def main():
-    if len(sys.argv) < 3:
-        logging.error("Missing arguments. Usage: download.py <url> <type>")
-        print(json.dumps({"error": "Missing arguments. Usage: download.py <url> <type>"}))
-        sys.exit(1)
+	if len(sys.argv) < 4:
+		error = {"error": "Usage: download.py <url> <type> <channel_path>"}
+		with open("/tmp/fallback_channel.json", "w") as f:
+			json.dump(error, f)
+		sys.exit(1)
 
-    url = sys.argv[1]
-    download_type = sys.argv[2]
-    output_dir = '/tmp'
+	url = sys.argv[1]
+	download_type = sys.argv[2]
+	channel_path = sys.argv[3]
+	output_dir = '/tmp'
 
-    result = {}
+	result = {}
 
-    try:
-        if download_type == 'file':
-            downloaded_file = download_file(url, output_dir)
-            result["file_path"] = downloaded_file
-        elif download_type == 'playlist':
-            downloaded_zip = download_playlist(url, output_dir)
-            result["file_path"] = downloaded_zip
-        else:
-            result["error"] = "Invalid type. Must be 'file' or 'playlist'."
-    except Exception as e:
-        result["error"] = str(e)
+	try:
+		if download_type == 'file':
+			result["file_path"] = download_file(url, output_dir)
+		elif download_type == 'playlist':
+			result["file_path"] = download_playlist(url, output_dir)
+		else:
+			result["error"] = "Invalid type. Must be 'file' or 'playlist'."
+	except Exception as e:
+		result["error"] = str(e)
 
-    # Output the result as JSON
-    print(json.dumps(result))
+	with open(channel_path, "w") as f:
+		json.dump(result, f)
 
 if __name__ == "__main__":
     main()
