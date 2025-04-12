@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return null;
         }
     }
+
     async function requestDownloadApi(type, normalizedUrl) {
         try {
             const serverApiUrl = await fetchServerApiUrl();
@@ -121,12 +122,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.remove();
                 window.URL.revokeObjectURL(downloadUrl);
             } else {
-                logMessage("Failed to download file.", "ERROR");
+                const errorResponse = await response.json();
+                const errorMessage = errorResponse.error || "Failed to download file.";
+                const errorDetails = errorResponse.details || "Unknown error details.";
+                logMessage(`${errorMessage} ${errorDetails}`, "ERROR");
             }
         } catch (error) {
             logMessage(`Error: ${error.message}`, "ERROR");
         }
-}
+    }
 
     async function showDownloadRow(title, type, normalizedUrl) {
         const downloadContainer = document.querySelector('.download-container');

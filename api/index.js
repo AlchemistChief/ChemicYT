@@ -45,11 +45,12 @@ app.post('/api/download', (req, res) => {
     execFile('python', [scriptPath, url, type], (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);
-            return res.status(500).json({ error: 'Failed to execute Python script' });
+            return res.status(500).json({ error: 'Failed to execute Python script', details: error.message });
         }
 
         if (stderr) {
             console.error(`Python script stderr: ${stderr}`);
+            return res.status(500).json({ error: 'Python script stderr', details: stderr });
         }
 
         try {
@@ -57,7 +58,8 @@ app.post('/api/download', (req, res) => {
             const result = JSON.parse(stdout.trim());
 
             if (result.error) {
-                return res.status(500).json({ error: result.error });
+                console.error(`Python script error: ${result.error}`);
+                return res.status(500).json({ error: result.error, details: 'Python script error' });
             }
 
             const filePath = result.file_path;
@@ -72,11 +74,12 @@ app.post('/api/download', (req, res) => {
                     }
                 });
             } else {
-                return res.status(500).json({ error: "File not found after download" });
+                console.error("File not found after download");
+                return res.status(500).json({ error: "File not found after download", details: "The file path does not exist after download" });
             }
         } catch (err) {
             console.error('Error parsing Python script output:', err);
-            return res.status(500).json({ error: 'Error processing Python script output' });
+            return res.status(500).json({ error: 'Error processing Python script output', details: err.message });
         }
     });
 });
