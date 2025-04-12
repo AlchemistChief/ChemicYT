@@ -10,7 +10,6 @@ Binary_Location = os.path.join(os.path.dirname(__file__), "bin")
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),
         logging.FileHandler('download_errors.log')
@@ -96,9 +95,6 @@ def main():
     url = sys.argv[1]
     download_type = sys.argv[2]
     output_dir = '/tmp'
-
-    # Log when a request is received
-    logging.info(f"Request received: URL={url}, Type={download_type}")
 
     result = {}
 
