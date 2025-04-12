@@ -4,12 +4,19 @@ import shutil
 from yt_dlp import YoutubeDL
 
 Cookie_File = os.path.join(os.path.dirname(__file__), "cookies.txt")
+Binary_Location = os.path.join(os.path.dirname(__file__), "bin")
 
 def get_basic_options(output_dir):
     return {
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
-        'ffmpeg_location': '/bin',
+                'ffmpeg_location': Binary_Location,
+        'cookiefile': Cookie_File,
+        'writethumbnail': True,
+        'embedthumbnail': True,
+        'embedmetadata': True,
+        'addmetadata': True,
+        'quiet': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
@@ -22,12 +29,6 @@ def get_basic_options(output_dir):
                 'key': 'FFmpegMetadata',
             }
         ],
-        'cookiefile': Cookie_File,
-        'writethumbnail': True,
-        'embedthumbnail': True,
-        'embedmetadata': True,
-        'addmetadata': True,
-        'quiet': True,
     }
 
 def download_file(url, output_dir):
