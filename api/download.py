@@ -7,9 +7,9 @@ Cookie_File = os.path.join(os.path.dirname(__file__), "cookies.txt")
 
 def get_basic_options(output_dir):
     return {
-        'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
-        "cookiefile": Cookie_File,
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
+        'ffmpeg_location': '/bin',
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
@@ -22,6 +22,7 @@ def get_basic_options(output_dir):
                 'key': 'FFmpegMetadata',
             }
         ],
+        'cookiefile': Cookie_File,
         'writethumbnail': True,
         'embedthumbnail': True,
         'embedmetadata': True,

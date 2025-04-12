@@ -11,10 +11,17 @@ FROM node:18
 WORKDIR /app
 
 # Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv && ln -s /usr/bin/python3 /usr/bin/python
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv wget && ln -s /usr/bin/python3 /usr/bin/python
 
 # Verify Python installation
 RUN python --version
+
+# Download and extract the latest ffmpeg release
+RUN wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-master-latest-linux64-gpl.tar.xz && \
+    tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz && \
+    mv ffmpeg-*-gpl/ffmpeg /bin/ && \
+    mv ffmpeg-*-gpl/ffprobe /bin/ && \
+    rm -rf ffmpeg-master-latest-linux64-gpl.tar.xz ffmpeg-*-gpl
 
 # Copy package.json and requirements.txt
 COPY ./package.json ./package.json
