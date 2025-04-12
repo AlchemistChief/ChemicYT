@@ -91,6 +91,9 @@ def main():
     download_type = sys.argv[2]
     output_dir = '/tmp'
 
+    # Log when a request is received
+    logging.info(f"Request received: URL={url}, Type={download_type}")
+
     result = {}
 
     try:
