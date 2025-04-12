@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y python3 python3-pip python3-venv wget &
 RUN python --version
 
 # Download and extract the latest ffmpeg release
-RUN wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-master-latest-linux64-gpl.tar.xz && \
+RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
     tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz && \
-    mv ffmpeg-*-gpl/ffmpeg /bin/ && \
+    mv ffmpeg-*-gpl/ffmpeg /bin/ && \    git rebase --continue
     mv ffmpeg-*-gpl/ffprobe /bin/ && \
     rm -rf ffmpeg-master-latest-linux64-gpl.tar.xz ffmpeg-*-gpl
 
