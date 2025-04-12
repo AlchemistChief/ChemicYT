@@ -3,10 +3,8 @@ import os
 import shutil
 from yt_dlp import YoutubeDL
 
-# Corrected path for cookies.txt
 Cookie_File = os.path.join(os.path.dirname(__file__), "cookies.txt")
 
-# Basic yt-dlp options shared by both file and playlist downloads
 def get_basic_options(output_dir):
     return {
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
