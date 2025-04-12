@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000
 
 const data = JSON.parse(fs.readFileSync(path.join(__dirname, '/data.json'), 'utf-8'))
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('/data.json', (req, res) => {
