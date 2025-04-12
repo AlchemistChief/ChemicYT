@@ -25,7 +25,7 @@ app.post('/api/download', (req, res) => {
         return res.status(400).json({ error: 'Missing required parameters: url or type' });
     }
 
-    const scriptPath = path.join(__dirname, '/download.py');
+    const scriptPath = path.join(__dirname, 'download.py');
 
     // Execute the Python script
     console.log(`Request received, executing downlaod.py`)
