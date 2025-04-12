@@ -52,20 +52,31 @@ app.post('/api/download', (req, res) => {
             console.error(`Python script stderr: ${stderr}`);
         }
 
-        // Extract the file path from the Python script output
-        const filePath = stdout.trim();
-        if (fs.existsSync(filePath)) {
-            const filename = path.basename(filePath); // Extract the actual filename
-            res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-            res.download(filePath, filename, (err) => {
-                if (err) {
-                    console.error(`Error sending file: ${err.message}`);
-                } else {
-                    console.log(`File sent successfully: ${filePath}`);
-                }
-            });
-        } else {
-            res.status(500).json({ error: "File not found after download" });
+        try {
+            // Parse the JSON output from Python script
+            const result = JSON.parse(stdout.trim());
+
+            if (result.error) {
+                return res.status(500).json({ error: result.error });
+            }
+
+            const filePath = result.file_path;
+            if (fs.existsSync(filePath)) {
+                const filename = path.basename(filePath); // Extract the actual filename
+                res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+                res.download(filePath, filename, (err) => {
+                    if (err) {
+                        console.error(`Error sending file: ${err.message}`);
+                    } else {
+                        console.log(`File sent successfully: ${filePath}`);
+                    }
+                });
+            } else {
+                return res.status(500).json({ error: "File not found after download" });
+            }
+        } catch (err) {
+            console.error('Error parsing Python script output:', err);
+            return res.status(500).json({ error: 'Error processing Python script output' });
         }
     });
 });

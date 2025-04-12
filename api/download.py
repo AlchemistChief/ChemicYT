@@ -1,7 +1,19 @@
 import sys
 import os
 import shutil
+import json
+import logging
 from yt_dlp import YoutubeDL
+
+# Setup logging
+logging.basicConfig(
+    level=logging.DEBUG,  # You can set this to DEBUG for more detailed logs
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),  # Log to console
+        logging.FileHandler('download_errors.log')  # Log to a file
+    ]
+)
 
 Cookie_File = os.path.join(os.path.dirname(__file__), "cookies.txt")
 Binary_Location = os.path.join(os.path.dirname(__file__), "bin")
@@ -10,7 +22,7 @@ def get_basic_options(output_dir):
     return {
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
-                'ffmpeg_location': Binary_Location,
+        'ffmpeg_location': Binary_Location,
         'cookiefile': Cookie_File,
         'writethumbnail': True,
         'embedthumbnail': True,
@@ -37,11 +49,14 @@ def download_file(url, output_dir):
         "noplaylist": True,
     }
 
-    with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        filename = ydl.prepare_filename(info)
-        print(filename)
-        return filename
+    try:
+        with YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info)
+            return filename
+    except Exception as e:
+        logging.error(f"Error downloading file: {e}")
+        raise
 
 def download_playlist(url, output_dir):
     ydl_opts = {
@@ -49,43 +64,46 @@ def download_playlist(url, output_dir):
         "noplaylist": False,
     }
 
-    with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=True)
-        playlist_title = info.get('title', 'playlist')
-        playlist_dir = os.path.join(output_dir, playlist_title)
-        zip_path = os.path.join(output_dir, f"{playlist_title}.zip")
+    try:
+        with YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            playlist_title = info.get('title', 'playlist')
+            playlist_dir = os.path.join(output_dir, playlist_title)
+            zip_path = os.path.join(output_dir, f"{playlist_title}.zip")
 
-        # Create a zip file of the playlist
-        shutil.make_archive(playlist_dir, 'zip', playlist_dir)
-        print(zip_path)
-        return zip_path
+            # Create a zip file of the playlist
+            shutil.make_archive(playlist_dir, 'zip', playlist_dir)
+            return zip_path
+    except Exception as e:
+        logging.error(f"Error downloading playlist: {e}")
+        raise
 
 def main():
     if len(sys.argv) < 3:
-        print("Error: Missing arguments. Usage: download.py <url> <type>")
+        logging.error("Missing arguments. Usage: download.py <url> <type>")
+        print(json.dumps({"error": "Missing arguments. Usage: download.py <url> <type>"}))
         sys.exit(1)
 
     url = sys.argv[1]
     download_type = sys.argv[2]
     output_dir = '/tmp'
 
-    if download_type == 'file':
-        try:
+    result = {}
+
+    try:
+        if download_type == 'file':
             downloaded_file = download_file(url, output_dir)
-            print(f"File downloaded successfully: {downloaded_file}")
-        except Exception as e:
-            print(f"Error downloading file: {e}")
-            sys.exit(1)
-    elif download_type == 'playlist':
-        try:
+            result["file_path"] = downloaded_file
+        elif download_type == 'playlist':
             downloaded_zip = download_playlist(url, output_dir)
-            print(f"Playlist downloaded and zipped successfully: {downloaded_zip}")
-        except Exception as e:
-            print(f"Error downloading playlist: {e}")
-            sys.exit(1)
-    else:
-        print("Error: Invalid type. Must be 'file' or 'playlist'.")
-        sys.exit(1)
+            result["file_path"] = downloaded_zip
+        else:
+            result["error"] = "Invalid type. Must be 'file' or 'playlist'."
+    except Exception as e:
+        result["error"] = str(e)
+
+    # Output the result as JSON
+    print(json.dumps(result))
 
 if __name__ == "__main__":
     main()
