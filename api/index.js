@@ -29,9 +29,6 @@ app.post('/api/download', (req, res) => {
 
     // Execute the Python script
     console.log(`Request received, executing downlaod.py`)
-    const { execFile } = require('child_process');
-    const fs = require('fs');
-    const path = require('path');
 
     // generate a unique temp file path for the "custom channel"
     const channelPath = path.join('/tmp', `channel_${Date.now()}.json`);
