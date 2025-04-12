@@ -6,7 +6,7 @@ const { execFile } = require('child_process');
 const app = express()
 const PORT = process.env.PORT || 3000
 
-const data = JSON.parse(fs.readFileSync(path.join(__dirname, '../data.json'), 'utf-8'))
+const data = JSON.parse(fs.readFileSync(path.join(__dirname, '/data.json'), 'utf-8'))
 
 app.use(express.static(path.join(__dirname, '../public')))
 
@@ -32,9 +32,16 @@ app.get('favicon.ico', (req, res) => {
 
 
 app.post('/api/download', (req, res) => {
-    const scriptPath = path.join(__dirname, '/download.py'); // Path to the Python script
+    const { url, type } = req.body;
 
-    execFile('python', [scriptPath], (error, stdout, stderr) => {
+    if (!url || !type) {
+        return res.status(400).json({ error: 'Missing required parameters: url or type' });
+    }
+
+    const scriptPath = path.join(__dirname, '/download.py');
+
+    // Execute the Python script
+    execFile('python', [scriptPath, url, type], (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);
             return res.status(500).json({ error: 'Failed to execute Python script' });
@@ -44,8 +51,21 @@ app.post('/api/download', (req, res) => {
             console.error(`Python script stderr: ${stderr}`);
         }
 
-        console.log(`Python script output: ${stdout}`);
-        res.json({ message: 'Python script executed successfully', output: stdout });
+        // Extract the file path from the Python script output
+        const filePath = stdout.trim();
+        if (fs.existsSync(filePath)) {
+            const filename = path.basename(filePath); // Extract the actual filename
+            res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+            res.download(filePath, filename, (err) => {
+                if (err) {
+                    console.error(`Error sending file: ${err.message}`);
+                } else {
+                    console.log(`File sent successfully: ${filePath}`);
+                }
+            });
+        } else {
+            res.status(500).json({ error: "File not found after download" });
+        }
     });
 });
 

@@ -94,20 +94,39 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(`${serverApiUrl}/api/download`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ url: normalizedUrl, type })
+                body: JSON.stringify({ url: normalizedUrl, type }), // Send arguments as JSON
             });
 
             if (response.ok) {
-                logMessage(`Download request successful for type: ${type}`, "SUCCESS");
+                // Extract the filename from the Content-Disposition header
+                const contentDisposition = response.headers.get("Content-Disposition");
+                let filename = "download.m4a"; // Default filename
+
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename="(.+)"/);
+                    if (match && match[1]) {
+                        filename = match[1];
+                    }
+                }
+
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = filename; // Use the extracted filename
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(downloadUrl);
             } else {
-                logMessage(`Download request failed for type: ${type}`, "ERROR");
+                logMessage("Failed to download file.", "ERROR");
             }
         } catch (error) {
-            logMessage(`Error during download request: ${error.message}`, "ERROR");
+            logMessage(`Error: ${error.message}`, "ERROR");
         }
-    }
+}
 
     async function showDownloadRow(title, type, normalizedUrl) {
         const downloadContainer = document.querySelector('.download-container');

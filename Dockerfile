@@ -16,15 +16,14 @@ RUN apt-get update && apt-get install -y python3 python3-pip && ln -s /usr/bin/p
 # Verify Python installation
 RUN python --version
 
-# Copy the package.json from the root directory to install backend dependencies
 COPY ./package.json ./package.json
+COPY ./requirements.txt ./requirements.txt
 
 # Install backend dependencies
 RUN npm install
 
 # Copy backend code
 COPY ./api /app/api
-COPY data.json ./data.json
 COPY --from=frontend /app/public /app/public
 
 # Set working directory to the backend
