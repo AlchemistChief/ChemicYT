@@ -16,11 +16,17 @@ RUN apt-get update && apt-get install -y python3 python3-pip python3-venv && ln 
 # Verify Python installation
 RUN python --version
 
+# Copy package.json and requirements.txt
+COPY ./package.json ./package.json
+COPY ./requirements.txt ./requirements.txt
+
+# Install backend dependencies (Node.js)
+RUN npm install
+
 # Create a virtual environment for Python dependencies
 RUN python -m venv /app/venv
 
 # Activate the virtual environment and install Python dependencies
-COPY ./requirements.txt ./requirements.txt
 RUN /app/venv/bin/pip install --upgrade pip && /app/venv/bin/pip install -r requirements.txt
 
 # Copy backend code
