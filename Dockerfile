@@ -22,8 +22,8 @@ COPY --from=frontend /app/public /app/public
 # Install ffmpeg into /app/api/bin
 RUN wget https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz && \
 	tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz && \
-	mv ffmpeg-*-gpl/ffmpeg /app/api/bin/ && \
-	mv ffmpeg-*-gpl/ffprobe /app/api/bin/ && \
+	mv ffmpeg-*-gpl/bin/ffmpeg /app/api/bin/ && \
+	mv ffmpeg-*-gpl/bin/ffprobe /app/api/bin/ && \
 	rm -rf ffmpeg-master-latest-linux64-gpl.tar.xz ffmpeg-*-gpl
 
 
