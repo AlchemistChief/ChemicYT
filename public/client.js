@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const videoEmbed = document.querySelector('.video-embed');
                         videoEmbed.style.display = "block";
                         videoEmbed.src = `https://www.youtube.com/embed/${id}`;
+                        logMessage(`Successfully fetched video details for ID: ${id}`, "VALID");
                     } else {
                         logMessage("Failed to fetch video details.", "ERROR");
                     }
@@ -202,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (apiData.items && apiData.items.length > 0) {
                         const playlistTitle = apiData.items[0].snippet.title;
                         showDownloadRow(playlistTitle, type, normalizedUrl);
+                        logMessage(`Successfully fetched playlist details for ID: ${id}`, "VALID");
                     } else {
                         logMessage("Failed to fetch playlist details.", "ERROR");
                     }

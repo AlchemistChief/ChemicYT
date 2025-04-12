@@ -26,14 +26,14 @@ def get_basic_options(output_dir):
         'noCheckCertificate': True,
         'no_abort_on_error': True,
         'writethumbnail': True,
-        'dumpSingleJson': True,
+        #'dumpSingleJson': True,
         'extract_audio': True,
         'no_embed_subs': True,
         'ignore_errors': True,
         'force_ipv6': True,
         'no_update': True,
         'quiet': True,
-        'verbose': True,
+        #'verbose': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
