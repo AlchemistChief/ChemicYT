@@ -120,8 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.download = filename; // Use the extracted filename
                 document.body.appendChild(a);
                 a.click();
-                a.remove();
-                window.URL.revokeObjectURL(downloadUrl);
             } else {
                 const errorResponse = await response.json();
                 const errorMessage = errorResponse.error || "Failed to download file.";

@@ -34,8 +34,8 @@ def get_basic_options(output_dir):
         'ignore_errors': True,
         'force_ipv6': True,
         'no_update': True,
-        'quiet': True,
-        #'verbose': True,
+        'quiet': False,
+        'verbose': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
