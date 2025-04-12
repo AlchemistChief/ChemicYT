@@ -20,18 +20,21 @@ logging.basicConfig(
 def get_basic_options(output_dir):
     return {
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'addHeader': ['referer:youtube.com', 'user-agent:googlebot'],
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
         'ffmpeg_location': Binary_Location,
         'cookiefile': Cookie_File,
-        'nocheckcertificate': True,
+        'noCheckCertificate': True,
         'no_abort_on_error': True,
         'writethumbnail': True,
+        'dumpSingleJson': True,
         'extract_audio': True,
         'no_embed_subs': True,
         'ignore_errors': True,
         'force_ipv4': True,
         'no_update': True,
         'quiet': True,
+        'verbose': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
