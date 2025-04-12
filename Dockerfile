@@ -27,7 +27,7 @@ RUN npm install
 RUN python -m venv /app/venv
 
 # Activate the virtual environment and install Python dependencies
-RUN /app/venv/bin/pip install --upgrade pip && /app/venv/bin/pip install -r requirements.txt
+RUN /app/venv/bin/pip install -r requirements.txt
 
 # Copy backend code
 COPY ./api /app/api
