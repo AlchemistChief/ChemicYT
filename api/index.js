@@ -27,7 +27,6 @@ app.post('/api/download', (req, res) => {
 
     const scriptPath = path.join(__dirname, 'download.py');
 
-    // Execute the Python script
     console.log(`Request received, executing downlaod.py`)
 
     // generate a unique temp file path for the "custom channel"

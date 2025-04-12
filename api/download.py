@@ -18,7 +18,10 @@ logging.basicConfig(
 
 def get_basic_options(output_dir):
     return {
-        'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'outtmpl': {
+        'default': os.path.join(output_dir, '%(title)s.%(ext)s'),
+        'pl_thumbnail': os.path.join(output_dir, '%(playlist_title)s_thumbnail.%(ext)s'),
+        },
         'format': 'm4a/bestaudio[ext=m4a]/bestaudio',
         'ffmpeg_location': Binary_Location,
         'cookiefile': Cookie_File,
@@ -40,7 +43,8 @@ def get_basic_options(output_dir):
             },
             {
                 'key': 'EmbedThumbnail',
-            },
+                'already_have_thumbnail': False
+             },
             {
                 'key': 'FFmpegMetadata',
             }
